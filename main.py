@@ -79,7 +79,7 @@ async def send_video(bot: Bot, user_id: int, video_path: str):
         logging.error(f"{e}")
 
 
-async def daily_video_sender(bot: Bot):
+async def daily_video_sender(bot: "Bot"):
     while True:
         now = datetime.datetime.now().strftime("%H:%M")
 

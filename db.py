@@ -90,7 +90,7 @@ async def add_level(level, user_id: int):
     await query("UPDATE mama_restart_bot_user_ids SET level = %s WHERE ids = %s", level, user_id, ret=False)
 
 
-async def get_code_added_date(user_id: int) -> Optional[datetime]:
+async def get_code_added_date(user_id: int):
     res = await query("SELECT code_added_date FROM mama_restart_bot_user_ids WHERE ids = %s", user_id)
     print(res)
     try:
@@ -112,7 +112,7 @@ async def add_message_record(user_id: int, message_id: int, message_type: str):
                 user_id, message_id, message_type)
 
 
-async def delete_user_messages(bot: Bot, user_id: int):
+async def delete_user_messages(bot: "Bot", user_id: int):
     try:
         # Получаем все сообщения типа 'video'
         message_ids = await query(
