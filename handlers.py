@@ -83,7 +83,7 @@ async def process_individual_code_add(msg: Message, state: FSMContext):
 async def request_individual_code(callback_query: CallbackQuery, state: FSMContext):
     user_id = callback_query.from_user.id
     if await db.user_has_access(user_id):
-        caption = "У вас есть доступ к курсу! Видео будут приходить к вам в указанное вами время "
+        caption = "У вас есть доступ к курсу! Видео будут приходить к вам в указанное вами время по поясу МСК (+3 GMT) "
         await callback_query.message.answer(text=caption, reply_markup=kb.start_course_1)
         await callback_query.answer()
     else:
@@ -115,7 +115,7 @@ async def start_course_handler(callback_query: CallbackQuery, state: FSMContext)
 
     # Отправляем пользователю сообщение о начале курса
     await callback_query.message.answer(
-        "Введите время (в формате ЧЧ:ММ), когда вы хотите получать новое видео.",
+        "Введите время (в формате ЧЧ:ММ) по поясу МСК (+3 GMT), когда вы хотите получать новое видео.",
         reply_markup=types.ReplyKeyboardRemove()
     )
 
@@ -132,7 +132,7 @@ async def start_course_handler(callback_query: CallbackQuery, state: FSMContext)
     user_id = callback_query.from_user.id
     if await db.user_has_access(user_id):
         # Спросить у пользователя, когда он хочет получать видео
-        await callback_query.message.answer("Введите время (в формате ЧЧ:ММ), когда вы хотите получать новое видео.")
+        await callback_query.message.answer("Введите время (в формате ЧЧ:ММ) по поясу МСК (+3 GMT), когда вы хотите получать новое видео.")
         await state.set_state(Form.setting_time_1)
         await callback_query.answer()
     else:
@@ -148,7 +148,7 @@ async def set_time(message: Message, state: FSMContext):
     try:
         datetime.datetime.strptime(time_str, "%H:%M")
     except ValueError:
-        await message.answer("Неверный формат времени. Пожалуйста, введите время в формате ЧЧ:ММ.",
+        await message.answer("Неверный формат времени. Пожалуйста, введите время в формате ЧЧ:ММ по поясу МСК (+3 GMT).",
                              reply_markup=kb.start_course_1)
         return
 
@@ -157,7 +157,7 @@ async def set_time(message: Message, state: FSMContext):
     try:
         await db.update_user_video_time_1(user_id, time_str)
         await message.answer(
-            "Время для получения видео установлено. Мы будем отправлять вам новое видео каждый день в это время.",
+            "Время для получения видео установлено. Мы будем отправлять вам новое видео каждый день в это время по поясу МСК (+3 GMT).",
             reply_markup=kb.start_course_1)
     except asyncpg.PostgresError as e:
         # Ловим ошибки связанные с базой данных
@@ -176,7 +176,7 @@ async def set_time(message: Message, state: FSMContext):
     try:
         datetime.datetime.strptime(time_str, "%H:%M")
     except ValueError:
-        await message.answer("Неверный формат времени. Пожалуйста, введите время в формате ЧЧ:ММ.")
+        await message.answer("Неверный формат времени. Пожалуйста, введите время в формате ЧЧ:ММ. по поясу МСК (+3 GMT)")
         return
 
     user_id = message.from_user.id
@@ -184,7 +184,7 @@ async def set_time(message: Message, state: FSMContext):
     try:
         await db.update_user_video_time(user_id, time_str)
         await message.answer(
-            "Время для получения видео установлено. Мы будем отправлять вам новое видео каждый день в это время.")
+            "Время для получения видео установлено. Мы будем отправлять вам новое видео каждый день в это время по поясу МСК (+3 GMT).")
     except asyncpg.PostgresError as e:
         # Ловим ошибки связанные с базой данных
         await message.answer("Произошла ошибка при обновлении времени. Попробуйте снова.", reply_markup=kb.start_course)
