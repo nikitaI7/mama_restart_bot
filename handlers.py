@@ -197,6 +197,9 @@ async def set_time(message: Message, state: FSMContext):
 async def unsubscribe_handler(callback_query: CallbackQuery):
     user_id = callback_query.from_user.id
     await db.delete_user_id(user_id)
+    await db.delete_video_time(user_id)
+    bot = callback_query.bot
+    await db.delete_user_messages(bot, user_id)
     await callback_query.answer("Вы успешно отписались от курса.")
 
 

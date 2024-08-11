@@ -116,13 +116,13 @@ async def delete_user_messages(bot: "Bot", user_id: int):
     try:
         # Получаем все сообщения типа 'video'
         message_ids = await query(
-            'SELECT message_id FROM mama_restart_bot_user_messages WHERE user_id = (%s) AND message_type = (%s)',
+            'SELECT message_id FROM mama_restart_bot_user_messages WHERE user_id = %s AND message_type = %s',
             user_id, 'video')
 
         for message_id in message_ids:
             await bot.delete_message(chat_id=user_id, message_id=message_id)
         # Удаляем записи из базы данных
-        await query('DELETE FROM mama_restart_bot_user_messages WHERE user_id = (%s) AND message_type = (%s)', user_id,
+        await query('DELETE FROM mama_restart_bot_user_messages WHERE user_id = %s AND message_type = %s', user_id,
                     'video')
     except Exception as e:
         logging.error(f"Error deleting messages for user {user_id}: {e}")
