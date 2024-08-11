@@ -120,7 +120,7 @@ async def delete_user_messages(bot: "Bot", user_id: int):
             user_id, 'video')
 
         for message_id in message_ids:
-            await bot.delete_message(chat_id=user_id, message_id=message_id)
+            await bot.delete_message(chat_id=user_id, message_id=message_id[0])
         # Удаляем записи из базы данных
         await query('DELETE FROM mama_restart_bot_user_messages WHERE user_id = %s AND message_type = %s', user_id,
                     'video')
